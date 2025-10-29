@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pranav Patel | Digital Craftsman</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+  <style>
+    /* ------------------------- */
+    /* --- 1. ROOT & THEME --- */
+    /* ------------------------- */
+    :root {
+      /* Vibrant Dark Theme (Cyberpunk Inspired) */
+      --bg-color-dark: #0a0a0f;
+      --surface-color-dark: rgba(20, 20, 30, 0.5);
+      --text-color-dark: #a0a0c0;
+      --heading-color-dark: #e0e0ff;
+      --primary-color-dark: #00f7ff; /* Electric Cyan */
+      --secondary-color-dark: #ff00e5; /* Neon Magenta */
+      --border-color-dark: rgba(0, 247, 255, 0.2);
+      
+      /* Clean Light Theme */
+      --bg-color-light: #f5f5fa;
+      --surface-color-light: rgba(255, 255, 255, 0.8);
+      --text-color-light: #454555;
+      --heading-color-light: #101015;
+      --primary-color-light: #2563eb;
+      --secondary-color-light: #d946ef;
+      --border-color-light: rgba(200, 200, 220, 0.5);
+
+      --font-heading: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --transition-fast: all 0.2s ease-out;
+      --transition-smooth: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    
+    html[data-theme='dark'] {
+      --bg-color: var(--bg-color-dark);
+      --surface-color: var(--surface-color-dark);
+      --text-color: var(--text-color-dark);
+      --heading-color: var(--heading-color-dark);
+      --primary-color: var(--primary-color-dark);
+      --secondary-color: var(--secondary-color-dark);
+      --border-color: var(--border-color-dark);
+    }
+    html[data-theme='light'] {
+      --bg-color: var(--bg-color-light);
+      --surface-color: var(--surface-color-light);
+      --text-color: var(--text-color-light);
+      --heading-color: var(--heading-color-light);
+      --primary-color: var(--primary-color-light);
+      --secondary-color: var(--secondary-color-light);
+      --border-color: var(--border-color-light);
+    }
+
+    /* ------------------------- */
+    /* --- 2. BASE & CURSOR --- */
+    /* ------------------------- */
+    * { cursor: none; }
+    
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: var(--transition-smooth);
+      overflow-x: hidden;
+    }
+
+    /* Custom Cursor */
+    .cursor-dot, .cursor-outline {
+      pointer-events: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      border-radius: 50%;
+      opacity: 0;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 9999;
+    }
+    .cursor-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--primary-color);
+    }
+    .cursor-outline {
+      width: 40px;
+      height: 40px;
+      background-color: rgba(0, 247, 255, 0.2);
+      transition: all 0.1s ease-out;
+    }
+    body:hover .cursor-dot, body:hover .cursor-outline { opacity: 1; }
+    .cursor-interact .cursor-outline {
+        transform: translate(-50%, -50%) scale(1.5);
+        background-color: rgba(255, 0, 229, 0.3);
+    }
+
+    /* General Styles */
+    h1, h2, h3 { font-family: var(--font-heading); color: var(--heading-color); font-weight: 700; }
+    a { color: var(--primary-color); text-decoration: none; transition: var(--transition-fast); }
+    section { padding: 8rem 1.5rem; max-width: 1100px; margin: auto; }
+    .section-title { font-size: clamp(2.5rem, 6vw, 4rem); text-align: center; margin-bottom: 4rem; }
+
+    /* ------------------------- */
+    /* --- 3. DYNAMIC GRID BG --- */
+    /* ------------------------- */
+    #background-grid {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100vh;
+      background-image:
+        linear-gradient(to right, var(--border-color) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--border-color) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: -1;
+      opacity: 0.3;
+      transition: var(--transition-smooth);
+    }
+    html[data-theme='light'] #background-grid { opacity: 0.5; }
+    
+    /* ------------------------- */
+    /* --- 4. HEADER & NAV --- */
+    /* ------------------------- */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; width: 100%;
+      padding: 1.5rem 2rem;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: var(--transition-smooth);
+      transform: translateY(-100%);
+    }
+    .navbar.visible {
+      transform: translateY(0);
+      background-color: var(--surface-color);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    header {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      padding: 2rem;
+    }
+    header h1 {
+      font-size: clamp(3rem, 12vw, 7rem);
+      line-height: 1;
+      background: linear-gradient(90deg, var(--heading-color), color-mix(in srgb, var(--primary-color) 50%, var(--heading-color)));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+    .glowing-button {
+      display: inline-block;
+      padding: 0.8rem 2rem;
+      margin-top: 2rem;
+      border: 2px solid var(--primary-color);
+      border-radius: 5px;
+      color: var(--primary-color);
+      font-family: var(--font-heading);
+      font-weight: 500;
+      box-shadow: 0 0 10px var(--primary-color), inset 0 0 10px var(--primary-color);
+      transition: var(--transition-fast);
+    }
+    .glowing-button:hover {
+      background-color: var(--primary-color);
+      color: var(--bg-color);
+      transform: scale(1.05);
+      box-shadow: 0 0 25px var(--primary-color);
+    }
+
+    /* ------------------------- */
+    /* --- 5. ABOUT SECTION --- */
+    /* ------------------------- */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      align-items: center;
+      text-align: left;
+    }
+    @media (min-width: 768px) {
+      .about-grid { grid-template-columns: 300px 1fr; }
+    }
+    .about-image-container {
+      position: relative;
+      width: 250px;
+      height: 250px;
+      margin: auto;
+    }
+    .about-image-container::after {
+      content: '';
+      position: absolute;
+      width: 100%; height: 100%;
+      top: 20px; left: 20px;
+      border: 2px solid var(--primary-color);
+      z-index: -1;
+      transition: var(--transition-smooth);
+    }
+    .about-image-container:hover::after {
+        top: 10px; left: 10px;
+    }
+    .about-image-container img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    /* ------------------------- */
+    /* --- 6. PROJECTS (3D TILT) --- */
+    /* ------------------------- */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+    .project-card {
+      background: var(--surface-color);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(5px);
+      transition: var(--transition-smooth);
+      transform-style: preserve-3d;
+      position: relative;
+    }
+    .project-card::before { /* Glow effect */
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      padding: 1px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: var(--transition-smooth);
+    }
+    .project-card:hover::before { opacity: 1; }
+    .project-card h3 { color: var(--heading-color); }
+    .project-card p { color: var(--text-color); }
+    
+    /* ------------------------- */
+    /* --- 7. SKILLS (BENTO GRID) --- */
+    /* ------------------------- */
+    .skills-bento-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: minmax(100px, auto);
+      gap: 1rem;
+      max-width: 800px;
+      margin: auto;
+    }
+    .skill-box {
+      background: var(--surface-color);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition-smooth);
+    }
+    .skill-box:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary-color);
+    }
+    .skill-box i { font-size: 2.5rem; color: var(--primary-color); }
+    .skill-box.main { grid-column: span 2; grid-row: span 2; font-size: 1.2rem; }
+    .skill-box.wide { grid-column: span 2; }
+    
+    /* ------------------------- */
+    /* --- 8. SCROLL & FOOTER --- */
+    /* ------------------------- */
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border-color); margin-top: 4rem; }
+
+  </style>
+</head>
+<body>
+
+  <div class="cursor-dot"></div>
+  <div class="cursor-outline"></div>
+  
+  <div id="background-grid"></div>
+
+  <nav class="navbar">
+    <a href="#" class="nav-logo">PP</a>
+    <div class="theme-switch" id="theme-toggle" title="Toggle Theme">
+      <i class="fas fa-sun"></i>
+    </div>
+  </nav>
+
+  <header>
+    <div class="header-content reveal">
+      <h1>Pranav Patel</h1>
+      <p>I build exceptional and accessible digital experiences.</p>
+      <a href="#projects" class="glowing-button">View My Work</a>
+    </div>
+  </header>
+
+  <main>
+    <section id="about">
+      <div class="about-grid">
+        <div class="about-image-container reveal">
+          <img src="../react/dashbord/public/img/user2.jpeg" alt="Profile Picture" />
+        </div>
+        <div class="reveal">
+          <h2 class="section-title" style="text-align: left; margin-bottom: 2rem;">About Me</h2>
+          <p>
+            As a dedicated Web Developer, my passion lies in the intersection of cutting-edge technology and human-centric design. I focus on writing clean, elegant code to build high-performance web applications that not only look beautiful but also provide intuitive, accessible experiences for every user.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <h2 class="section-title reveal">Featured Projects</h2>
+      <div class="projects-grid">
+        <div class="project-card reveal" data-tilt>
+          <h3>QuantumLeap CRM</h3>
+          <p>A responsive marketing dashboard built with React and D3.js, featuring real-time data visualization and a component-based architecture.</p>
+          <a href="#" class="glowing-button" style="padding: 0.5rem 1rem; font-size: 0.9rem; margin-top: 1rem;">Explore</a>
+        </div>
+        <div class="project-card reveal" data-tilt>
+          <h3>Nova E-commerce</h3>
+          <p>A full-stack e-commerce platform with a custom CMS, focused on performance, security, and a seamless checkout experience via the Stripe API.</p>
+          <a href="#" class="glowing-button" style="padding: 0.5rem 1rem; font-size: 0.9rem; margin-top: 1rem;">Explore</a>
+        </div>
+        <div class="project-card reveal" data-tilt>
+          <h3>Aether Blog</h3>
+          <p>A minimalist, content-focused blog platform built with a modern JAMstack architecture (Next.js & Contentful) for optimal speed and SEO.</p>
+          <a href="#" class="glowing-button" style="padding: 0.5rem 1rem; font-size: 0.9rem; margin-top: 1rem;">Explore</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <h2 class="section-title reveal">My Toolkit</h2>
+      <div class="skills-bento-grid">
+        <div class="skill-box main reveal"><i class="fab fa-react"></i><span>React & Next.js</span></div>
+        <div class="skill-box reveal"><i class="fab fa-node-js"></i><span>Node.js</span></div>
+        <div class="skill-box reveal"><i class="fab fa-git-alt"></i><span>Git</span></div>
+        <div class="skill-box wide reveal"><i class="fas fa-database"></i><span>SQL & NoSQL</span></div>
+        <div class="skill-box reveal"><i class="fab fa-js-square"></i><span>JavaScript</span></div>
+        <div class="skill-box reveal"><i class="fab fa-css3-alt"></i><span>CSS & Sass</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="reveal">
+    <p>&copy; 2025 Pranav Patel. Designed and built from scratch.</p>
+  </footer>
+
+  <script>
+    // Lightweight 3D Tilt Effect Script
+    const tilt = (e, t) => {
+      const { left: l, top: o, width: n, height: i } = t.getBoundingClientRect(),
+        s = e.clientX - l,
+        a = e.clientY - o,
+        r = t.dataset.tiltMaxRotation || 10,
+        c = t.dataset.tiltMaxPerspective || 1e3;
+      (t.style.transform = `perspective(${c}px) rotateX(${(a / i - 0.5) * -r}deg) rotateY(${(s / n - 0.5) * r}deg) scale3d(1.05, 1.05, 1.05)`),
+        (t.style.transition = "transform 0.1s ease-out");
+    };
+    document.querySelectorAll("[data-tilt]").forEach(e => {
+      e.addEventListener("mousemove", t => tilt(t, e)),
+        e.addEventListener("mouseleave", () => {
+          (e.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)"), (e.style.transition = "transform 0.6s ease-in-out");
+        });
+    });
+
+    // --- Cursor Follower Script ---
+    const cursorDot = document.querySelector(".cursor-dot");
+    const cursorOutline = document.querySelector(".cursor-outline");
+    window.addEventListener("mousemove", (e) => {
+        const { clientX, clientY } = e;
+        cursorDot.style.left = `${clientX}px`;
+        cursorDot.style.top = `${clientY}px`;
+        cursorOutline.animate({
+            left: `${clientX}px`,
+            top: `${clientY}px`
+        }, { duration: 300, fill: "forwards" });
+    });
+    document.querySelectorAll("a, button, .theme-switch, [data-tilt]").forEach(el => {
+        el.addEventListener("mouseenter", () => document.body.classList.add("cursor-interact"));
+        el.addEventListener("mouseleave", () => document.body.classList.remove("cursor-interact"));
+    });
+
+    // --- Other Scripts (Theme, Scroll, Nav) ---
+    document.addEventListener('DOMContentLoaded', () => {
+      const themeToggle = document.getElementById('theme-toggle');
+      const htmlEl = document.documentElement;
+      const currentTheme = localStorage.getItem('theme') || 'dark';
+      htmlEl.setAttribute('data-theme', currentTheme);
+      themeToggle.innerHTML = currentTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+      themeToggle.addEventListener('click', () => {
+        const newTheme = htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        htmlEl.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        themeToggle.innerHTML = newTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+      });
+      const revealElements = document.querySelectorAll('.reveal');
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObserver.unobserve(entry.target); }
+        });
+      }, { threshold: 0.1 });
+      revealElements.forEach(el => revealObserver.observe(el));
+      const navbar = document.querySelector('.navbar');
+      window.addEventListener('scroll', () => {
+        navbar.classList.toggle('visible', window.scrollY > 100);
+      });
+    });
+  </script>
+
+</body>
+</html>
